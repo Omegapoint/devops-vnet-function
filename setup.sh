@@ -1,6 +1,8 @@
 CURRENT_SUBSCRIPTION=$(az account show --query 'name' --output tsv)
 
 if [[ "$CURRENT_SUBSCRIPTION" == "Omegapoint Lab" ]]; then
+
+    #public
     NAME='devops-vnet-function-public'
     RESOURCE_GROUP=${NAME}
 
@@ -11,18 +13,14 @@ if [[ "$CURRENT_SUBSCRIPTION" == "Omegapoint Lab" ]]; then
     FUNCTION_DEPLOYMENT_NAME=function-deploy-$(date '+%y%m%d-%H%M%S')
     az deployment group create \
             --resource-group $RESOURCE_GROUP \
-            --template-file function.bicep  \
+            --template-file public/function.bicep  \
             --parameters name=${NAME}\
             --name $FUNCTION_DEPLOYMENT_NAME
 
-    #ACR_NAME=$(az deployment group show \
-    #        --resource-group $RESOURCE_GROUP \
-    #        --name $INFRA_DEPLOYMENT_NAME \
-    #        --query properties.outputs.acrName.value \
-    #        --output tsv)
+    mvn clean package -U --file public/java-function/pom.xml
+    mvn azure-functions:deploy --file public/java-function/pom.xml
 
-    mvn clean package -U --file java-function/pom.xml
-    mvn azure-functions:deploy --file java-function/pom.xml
+    #
 else
   echo "Wrong subscription ($CURRENT_SUBSCRIPTION)"
 fi
