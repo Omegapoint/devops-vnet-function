@@ -8,10 +8,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
-engine/.idea/**
-student-service/.idea/**
-engine/target/**
-student-service/target/**
+**/java-function/.idea/**
+**/java-function/target/**
 
 
 # AWS User-specific
