@@ -1,0 +1,16 @@
+trigger: none
+
+pool:
+  name: MyPool
+ 
+steps:
+- task: AzureCLI@2
+  displayName: 'Deploy'
+  inputs:
+    azureSubscription: connection
+    scriptLocation: inlineScript
+    scriptType: bash
+    inlineScript: |
+      echo 'Hello World self'
+      cd self-hosted-agent
+      sh deploy.sh
